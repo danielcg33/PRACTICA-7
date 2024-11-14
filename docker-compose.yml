@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  dns-server:
+     
+     image: internetsystemsconsortium/bind9:9.16
+     container_name: dns-server
+     networks:
+       subnetbind:
+         ipv4_address: # IP  A FIJAR 
+     volumes:
+       - ./bind9:/etc/bind
+     ports:
+       - "53:53/udp"
+       - "53:53/tcp"
+     restart: always
+     
+  alphine-client:
+  
+     image: alpine:latest
+     container_name: alpine-client
+     networks:
+       subnetbind:
+         ipv4_address: # IP  A FIJAR 
+     command: tail -f /dev/null
+     depends_on:
+       - dns-server
+     restart: always
+     
+     
+networks:
+  internal_network:
+     driver: bridge
+     ipam:
+      config:
+       - subnet: # RED
+         ip_range: # RANGO DE IPs 
+         gateway: # PUERTA DE SALIDA 
